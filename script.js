@@ -1,14 +1,10 @@
-// Добавляем в самое начало файла
 let customDate = null;
-
-// В начале файла добавим переменную для отслеживания состояния производительности
-let highPerformanceMode = localStorage.getItem('highPerformanceMode') === 'true'; // Восстанавливаем состояние из localStorage
+let highPerformanceMode = localStorage.getItem('highPerformanceMode') === 'true';
 
 function getCurrentDate() {
     return customDate || new Date();
 }
 
-// Функция для создания случайных звезд
 function createStars(container, count, className, size, delay) {
     const fragment = document.createDocumentFragment();
     
@@ -28,7 +24,6 @@ function createStars(container, count, className, size, delay) {
     
     container.appendChild(fragment);
     
-    // Используем IntersectionObserver для анимации только видимых звезд
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -42,11 +37,9 @@ function createStars(container, count, className, size, delay) {
     });
 }
 
-// Создаём звёзды
 const starsContainer = document.getElementById('stars');
 createStars(starsContainer, 300, 'star', 2, 2);
 
-// Анимация сердечка
 let c = document.getElementById('heart-canvas'),
     $ = c.getContext('2d'),
     w = c.width = innerWidth,
@@ -147,16 +140,14 @@ function loop() {
     
     time += ((Math.sin(time)) < 0 ? 9 : (n > 0.8) ? 0.2 : 1) * config.timeDelta;
     
-    // Используем более эффективный способ очистки
     $.globalAlpha = 0.1;
     $.fillStyle = 'black';
     $.fillRect(0, 0, w, h);
     $.globalAlpha = 1;
     
-    // Оптимизируем рендеринг частиц
     for (let i = 0; i < e.length; i++) {
         let u = e[i];
-        if (!isParticleVisible(u)) continue; // Пропускаем невидимые частицы
+        if (!isParticleVisible(u)) continue;
         
         let q = targetPoints[u.q],
             dx = u.trace[0].x - q[0],
@@ -205,7 +196,6 @@ function loop() {
     animationFrameId = requestAnimationFrame(loop);
 }
 
-// Функция проверки видимости частицы
 function isParticleVisible(particle) {
     return particle.trace[0].x >= 0 && 
            particle.trace[0].x <= w && 
@@ -215,22 +205,19 @@ function isParticleVisible(particle) {
 
 loop();
 
-// Логика проверки даты
 const today = getCurrentDate();
-const march8 = new Date(today.getFullYear(), 2, 8); // 8 марта
-const march9 = new Date(today.getFullYear(), 2, 9); // 9 марта
-const march10 = new Date(today.getFullYear(), 2, 10); // 10 марта
+const march8 = new Date(today.getFullYear(), 2, 8);
+const march9 = new Date(today.getFullYear(), 2, 9);
+const march10 = new Date(today.getFullYear(), 2, 10);
 
 const congratsMessage = document.getElementById('congrats-message');
 const additionalMessage = document.getElementById('additional-message');
 
-// Функция для вычисления разницы в днях
 function getDaysDifference(date1, date2) {
     const timeDiff = date2 - date1;
     return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 }
 
-// Функция для правильного склонения слова "дней"
 function getDaysWord(days) {
     const lastDigit = days % 10;
     const lastTwoDigits = days % 100;
@@ -251,14 +238,12 @@ function getDaysWord(days) {
     }
 }
 
-// Функция проверки даты для конфетти
 function isMarch10() {
     const today = getCurrentDate();
-    const march10 = new Date(today.getFullYear(), 2, 10); // 10 марта
+    const march10 = new Date(today.getFullYear(), 2, 10);
     return today.getDate() === march10.getDate() && today.getMonth() === march10.getMonth();
 }
 
-// Функция обновления всего контента на странице
 function updateContent() {
     const today = getCurrentDate();
     const march8 = new Date(today.getFullYear(), 2, 8);
@@ -266,9 +251,8 @@ function updateContent() {
     const march10 = new Date(today.getFullYear(), 2, 10);
 
     if (today >= march10) {
-        // День рождения - показываем только основное поздравление
         congratsMessage.textContent = "С Днём Рождения! 🎉";
-        createConfetti(); // Добавляем конфетти
+        createConfetti();
     } else {
         if (today < march8) {
             const daysToMarch8 = getDaysDifference(today, march8);
@@ -282,13 +266,11 @@ function updateContent() {
     }
 }
 
-// Восстанавливаем кастомную дату при загрузке страницы
 const savedDate = localStorage.getItem('customDate');
 if (savedDate) {
     customDate = new Date(savedDate);
 }
 
-// В начале файла после объявления customDate добавим функцию обновления индикатора
 function updateDateIndicator() {
     const indicator = document.getElementById('date-indicator');
     if (customDate) {
@@ -300,43 +282,36 @@ function updateDateIndicator() {
     }
 }
 
-// В обработчике DOMContentLoaded добавим вызов функции
 document.addEventListener('DOMContentLoaded', () => {
     updateContent();
-    updateDateIndicator(); // Добавляем эту строку
-    document.getElementById('performance-toggle').checked = highPerformanceMode; // Устанавливаем состояние тумблера
+    updateDateIndicator();
+    document.getElementById('performance-toggle').checked = highPerformanceMode;
 
     document.getElementById('performance-toggle').addEventListener('change', (event) => {
         highPerformanceMode = event.target.checked;
-        localStorage.setItem('highPerformanceMode', highPerformanceMode); // Сохраняем состояние в localStorage
-        toggleStars(); // Вызываем функцию переключения звезд и гифки
+        localStorage.setItem('highPerformanceMode', highPerformanceMode);
+        toggleStars();
 
-        // Перезагружаем страницу, чтобы применить изменения
         location.reload();
     });
 
-    // Вызов функции при загрузке страницы
     toggleStars();
 });
 
-// Обработчик клика
 document.getElementById('heart-canvas').addEventListener('click', () => {
     const clickMessage = document.getElementById('click-message');
     const stars = document.querySelectorAll('.star');
 
-    // Плавное исчезновение надписи
     clickMessage.style.opacity = '0.8';
-    void clickMessage.offsetWidth; // Принудительный рефлоу
+    void clickMessage.offsetWidth;
     clickMessage.style.animation = 'none';
     clickMessage.classList.add('fade-out');
 
-    // Исчезновение сердечка
     c.style.opacity = '1';
     setTimeout(() => {
         c.style.opacity = '0';
     }, 0);
 
-    // Анимация звезд
     stars.forEach((star) => {
         star.style.opacity = '0';
         setTimeout(() => {
@@ -344,7 +319,6 @@ document.getElementById('heart-canvas').addEventListener('click', () => {
         }, Math.random() * 2000);
     });
 
-    // Анимация основного сообщения
     anime({
         targets: congratsMessage,
         translateY: '-100vh',
@@ -355,7 +329,6 @@ document.getElementById('heart-canvas').addEventListener('click', () => {
             const today = getCurrentDate();
             
             if (today >= march10) {
-                // День рождения - показываем дополнительное сообщение с подарком
                 additionalMessage.innerHTML = `
                     <div class="message-content">
                         <span class="highlight">Братанчик</span>, поздравляю тебя с Днём Рождения! 🎉
@@ -379,7 +352,6 @@ document.getElementById('heart-canvas').addEventListener('click', () => {
                     </div>
                 `;
             } else if (today >= march8 && today < march9) {
-                // Поздравление на 8 марта
                 additionalMessage.innerHTML = `
                     <div class="message-content">
                     <span class="highlight">Братанчик</span>, поздравляю тебя с <span class="accent">ЖОСКИМ ВУМЕН</span> днём, жишь! 
@@ -414,7 +386,6 @@ document.getElementById('heart-canvas').addEventListener('click', () => {
     });
 });
 
-// Добавим глобальную функцию для обработки клика по подарку
 function handleGiftClick(giftElement) {
     const messageContent = giftElement.closest('.message-content');
     
@@ -427,7 +398,6 @@ function handleGiftClick(giftElement) {
         </div>
     `;
 
-    // Анимируем появление текста через anime.js вместо CSS анимации
     anime({
         targets: '.joke-text',
         opacity: [0, 1],
@@ -435,7 +405,6 @@ function handleGiftClick(giftElement) {
         duration: 1000,
         easing: 'easeOutQuad',
         complete: () => {
-            // Через 3 секунды показываем второй подарок
             setTimeout(() => {
                 messageContent.innerHTML = `
                     <div class="gift-container">
@@ -450,7 +419,6 @@ function handleGiftClick(giftElement) {
     });
 }
 
-// Обработчик движения мыши для звезд
 let prevMouseX = 0;
 let prevMouseY = 0;
 let mouseVelocityX = 0;
@@ -462,7 +430,6 @@ let repelStrength = 0.5;
 let velocity = [];
 let positions = [];
 
-// Инициализация позиций и скоростей
 for (let i = 0; i < starsElements.length; i++) {
     velocity.push({ 
         x: Math.random() * 2 - 1, 
@@ -526,12 +493,9 @@ document.addEventListener('mousemove', (event) => {
 
 updateStars();
 
-// Добавим переменную для отслеживания существующего контейнера конфетти
 let confettiInstance = null;
 
-// Функция для создания конфетти
 function createConfetti() {
-    // Останавливаем предыдущий экземпляр, если он существует
     if (confettiInstance) {
         confettiInstance.stop();
     }
@@ -542,16 +506,14 @@ function createConfetti() {
     confettiInstance = new Confettiful(confettiContainer);
 }
 
-// Обновляем класс Confettiful чтобы добавить возможность остановки
 class Confettiful {
     constructor(el) {
         this.el = el;
         this.containerEl = null;
         this.confettiInterval = null;
-        this.confettiPool = []; // Пул переиспользуемых конфетти
+        this.confettiPool = [];
         this.poolSize = 100;
         
-        // Добавляем цвета и типы анимаций
         this.confettiColors = [
             '#fce18a', '#ff726d', '#b48def', '#f4306d',
             '#ff69b4', '#7ee3ff', '#9fe7c3', '#e1a0ff'
@@ -624,7 +586,6 @@ class Confettiful {
     }
 }
 
-// Обновляем админ-панель
 document.addEventListener('DOMContentLoaded', () => {
     const adminButton = document.getElementById('admin-button');
     const adminModal = document.getElementById('admin-modal');
@@ -636,21 +597,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyButton = document.getElementById('apply-date');
     const resetButton = document.getElementById('reset-date');
 
-    // Открытие модального окна
     adminButton.addEventListener('click', () => {
         adminModal.classList.add('show');
         passwordInput.value = '';
         passwordInput.focus();
     });
 
-    // Закрытие модального окна
     closeModal.addEventListener('click', () => {
         adminModal.classList.remove('show');
         passwordSection.style.display = 'block';
         dateSection.style.display = 'none';
     });
 
-    // Проверка пароля
     passwordInput.addEventListener('keyup', (e) => {
         if (e.key === 'Enter' && passwordInput.value === '5790') {
             passwordSection.style.display = 'none';
@@ -659,25 +617,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Применение даты
     applyButton.addEventListener('click', () => {
         if (dateInput.value) {
             customDate = new Date(dateInput.value);
             localStorage.setItem('customDate', dateInput.value);
-            updateDateIndicator(); // Добавляем эту строку
+            updateDateIndicator();
             location.reload();
         }
     });
 
-    // Сброс даты
     resetButton.addEventListener('click', () => {
         customDate = null;
         localStorage.removeItem('customDate');
-        updateDateIndicator(); // Добавляем эту строку
+        updateDateIndicator();
         location.reload();
     });
 
-    // Закрытие по клику вне модального окна
     document.addEventListener('click', (e) => {
         if (!adminModal.contains(e.target) && e.target !== adminButton) {
             adminModal.classList.remove('show');
@@ -687,21 +642,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Функция для управления этапами поздравления
 function initBirthdayStages() {
     const stage1 = document.querySelector('.stage-1');
     const stage2 = document.querySelector('.stage-2');
     const stage3 = document.querySelector('.stage-3');
     const stage4 = document.querySelector('.stage-4');
     
-    // Обработчик первого подарка
     const firstGift = stage1.querySelector('.gift-box');
     firstGift.addEventListener('click', () => {
-        // Убираем сердце
         const heartCanvas = document.getElementById('heart-canvas');
         heartCanvas.style.display = 'none';
         
-        // Убираем текст поздравления, оставляем только звезды и контейнер
         const messageContent = document.querySelector('.message-content');
         messageContent.innerHTML = `
             <div class="joke-text" style="opacity: 0">
@@ -710,14 +661,12 @@ function initBirthdayStages() {
             </div>
         `;
         
-        // Анимируем появление текста
         anime({
             targets: '.joke-text',
             opacity: 1,
             duration: 1000,
             easing: 'easeInOutQuad',
             complete: () => {
-                // Через 3 секунды показываем второй подарок
                 setTimeout(() => {
                     messageContent.innerHTML = `
                         <div class="gift-container">
@@ -726,7 +675,6 @@ function initBirthdayStages() {
                         </div>
                     `;
                     
-                    // Инициализируем обработчик зажатия
                     initHoldGift(messageContent);
                 }, 3000);
             }
@@ -734,7 +682,6 @@ function initBirthdayStages() {
     });
 }
 
-// Обновляем массив сообщений от друзей
 const friendsMessages = [
     {
         name: 'Руби',
@@ -824,15 +771,13 @@ function showNextMessage(container, index = 0) {
 
     container.querySelector('.friends-wishes').appendChild(friendCard);
 
-    // Обновляем прокрутку к новой карточке
     setTimeout(() => {
         friendCard.scrollIntoView({ 
             behavior: 'smooth', 
-            block: 'nearest' // Изменяем на 'nearest' для более плавной прокрутки
+            block: 'nearest'
         });
     }, 100);
 
-    // Анимируем появление карточки
     anime({
         targets: friendCard,
         opacity: [0, 1],
@@ -840,7 +785,6 @@ function showNextMessage(container, index = 0) {
         duration: 500,
         easing: 'easeOutCubic',
         complete: () => {
-            // Через 4 секунды показываем сообщение
             setTimeout(() => {
                 const messageContainer = friendCard.querySelector('.message-container');
                 messageContainer.innerHTML = `
@@ -855,7 +799,6 @@ function showNextMessage(container, index = 0) {
                     </div>
                 `;
 
-                // Анимируем появление сообщения
                 const messageBubble = messageContainer.querySelector('.message-bubble');
                 anime({
                     targets: messageBubble,
@@ -864,7 +807,6 @@ function showNextMessage(container, index = 0) {
                     duration: 600,
                     easing: 'easeOutCubic',
                     complete: () => {
-                        // Добавляем кнопку "Продолжить", если есть следующее сообщение
                         if (index < friendsMessages.length - 1) {
                             const buttonContainer = document.createElement('div');
                             buttonContainer.className = 'continue-button-container';
@@ -902,12 +844,10 @@ function initHoldGift(container) {
                 gift.classList.add('explode');
                 createMassiveConfetti();
                 
-                // Убираем min-height и показываем контейнер сразу
                 container.innerHTML = `
                     <div class="friends-wishes" style="opacity: 0"></div>
                 `;
 
-                // Анимируем появление контейнера
                 anime({
                     targets: '.friends-wishes',
                     opacity: 1,
@@ -935,7 +875,6 @@ function initHoldGift(container) {
     gift.addEventListener('mouseleave', stopHolding);
 }
 
-// Функция для создания массивного залпа конфетти
 function createMassiveConfetti() {
     for (let i = 0; i < 5; i++) {
         setTimeout(() => {
@@ -944,46 +883,37 @@ function createMassiveConfetti() {
     }
 }
 
-// Добавляем обработку ошибок
 window.addEventListener('error', function(e) {
     console.error('Error:', e.message);
-    // Можно добавить восстановление после ошибок
 });
 
-// Оптимизация для мобильных устройств
 if ('ontouchstart' in window) {
     document.documentElement.style.touchAction = 'manipulation';
 }
 
-// Функция для переключения звезд и гифки
 function toggleStars() {
     const starsContainer = document.getElementById('stars');
     if (highPerformanceMode) {
-        // Удаляем звезды
         starsContainer.innerHTML = '';
         
-        // Добавляем гифку
         const existingGif = document.querySelector('body > img[src="images/stars-galaxy.gif"]');
         if (!existingGif) {
             const gif = document.createElement('img');
-            gif.src = 'images/stars-galaxy.gif'; // Убедитесь, что путь правильный
+            gif.src = 'images/stars-galaxy.gif';
             gif.style.width = '100%';
             gif.style.height = '100%';
             gif.style.top = '0';
             gif.style.left = '0';
-            gif.style.zIndex = '0'; // Устанавливаем на задний план
-            gif.style.pointerEvents = 'none'; // Чтобы клики проходили через гифку
+            gif.style.zIndex = '0';
+            gif.style.pointerEvents = 'none';
             
-            // Добавляем гифку в контейнер звезд
-            starsContainer.appendChild(gif); // Теперь гифка будет добавлена в контейнер звезд
+            starsContainer.appendChild(gif);
         }
     } else {
-        // Удаляем гифку, если она есть
         const existingGif = document.querySelector('body > img[src="images/stars-galaxy.gif"]');
         if (existingGif) {
             existingGif.remove();
         }
-        // Восстанавливаем звезды
         createStars(starsContainer, 300, 'star', 2, 2);
     }
 }
