@@ -1,0 +1,915 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Pacifico', cursive;
+    background: #000;
+    color: white;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 1;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle 2s infinite ease
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; transform: translateZ(0); }
+    50% { opacity: 1; transform: translateZ(0); }
+}
+
+#heart-canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+#click-message {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    opacity: 0;
+    text-shadow: 0 0 15px rgba(255, 100, 100, 0.9);
+    z-index: 2;
+    pointer-events: none;
+    animation: 
+        fadeIn 0.5s ease-out forwards 3s,
+        blink 1s linear infinite 3.5s;
+    color: rgba(255, 105, 180, 0.8);
+    font-family: 'Pacifico', cursive;
+    text-align: center;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    transition: opacity 0.8s ease-in-out !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 0.8; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+#click-message.fade-out {
+    opacity: 0 !important;
+    animation: none !important;
+}
+
+.text-container {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#congrats-message {
+    font-size: 4em;
+    opacity: 0;
+    margin: 0;
+    position: relative;
+    animation: 
+        floatUp 2s cubic-bezier(0.19, 1, 0.22, 1) forwards,
+        glow 2s ease-in-out infinite alternate;
+    white-space: nowrap;
+    padding: 20px;
+    background: linear-gradient(45deg, #ff69b4, #ff1493);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-radius: 15px;
+    display: inline-block;
+    filter: drop-shadow(0 0 20px rgba(255,105,180,0.5));
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(100vh) rotateZ(-10deg); opacity: 0; }
+    100% { transform: translateY(0) rotateZ(0); opacity: 1; }
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 10px rgba(255,105,180,0.5)); }
+    to { filter: drop-shadow(0 0 30px rgba(255,105,180,0.9)); }
+}
+
+#additional-message {
+    font-size: 1.8em;
+    opacity: 0;
+    max-width: 800px;
+    margin: 40px auto 0;
+    padding: 30px;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.3),
+        rgba(255, 105, 180, 0.01) 25%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(255, 105, 180, 0.01) 75%,
+        rgba(0, 0, 0, 0.3)
+    );
+    backdrop-filter: blur(8px) saturate(110%);
+    -webkit-backdrop-filter: blur(8px) saturate(110%);
+    box-shadow: 
+        0 0 50px rgba(255, 105, 180, 0.05),
+        inset 0 0 100px rgba(255, 105, 180, 0.01);
+    border: 1px solid rgba(255, 105, 180, 0.08);
+    transform: translateY(50px);
+    transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Comfortaa', cursive;
+    pointer-events: auto;
+}
+
+#additional-message::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(255, 105, 180, 0.05),
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+#additional-message::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 105, 180, 0.05),
+        transparent
+    );
+    animation: shine 12s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0%, 100% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    10%, 90% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.3;
+        transform: translateX(100%);
+    }
+}
+
+#additional-message.show {
+    opacity: 1;
+    transform: translateY(0);
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.3),
+        rgba(255, 105, 180, 0.01) 25%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(255, 105, 180, 0.01) 75%,
+        rgba(0, 0, 0, 0.3)
+    );
+}
+
+#additional-message .highlight {
+    color: #ff8dc6;
+    font-weight: bold;
+    text-shadow: 
+        0 0 10px rgba(255, 105, 180, 1),
+        0 0 20px rgba(255, 105, 180, 0.8);
+    letter-spacing: 0.5px;
+}
+
+#additional-message .accent {
+    color: #ff69b4;
+    font-weight: bold;
+    text-shadow: 
+        0 0 15px rgba(255, 20, 147, 1),
+        0 0 30px rgba(255, 20, 147, 0.8);
+    letter-spacing: 0.5px;
+}
+
+#additional-message .birthday-note {
+    margin-top: 20px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
+}
+
+@media (max-width: 768px) {
+    #congrats-message {
+        font-size: clamp(1.5em, 5vw, 2.5em);
+    }
+    
+    #additional-message {
+        font-size: clamp(1em, 4vw, 1.2em);
+        padding: 15px;
+        margin: 15px;
+    }
+}
+
+#music-control {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+}
+
+/* Конфетти */
+.confetti-container {
+    perspective: 700px;
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.confetti {
+    position: absolute;
+    z-index: 1;
+    top: -10px;
+    border-radius: 0%;
+    will-change: transform, opacity;
+}
+
+.confetti--animation-slow {
+    animation: confetti-slow 2.25s linear 1 forwards;
+}
+
+.confetti--animation-medium {
+    animation: confetti-medium 1.75s linear 1 forwards;
+}
+
+.confetti--animation-fast {
+    animation: confetti-fast 1.25s linear 1 forwards;
+}
+
+@keyframes confetti-slow {
+    0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }
+    100% { transform: translate3d(25px, 105vh, 0) rotateX(360deg) rotateY(180deg); }
+}
+
+@keyframes confetti-medium {
+    0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }
+    100% { transform: translate3d(100px, 105vh, 0) rotateX(100deg) rotateY(360deg); }
+}
+
+@keyframes confetti-fast {
+    0% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0); }
+    100% { transform: translate3d(-50px, 105vh, 0) rotateX(10deg) rotateY(250deg); }
+}
+
+#admin-panel {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1000;
+}
+
+.admin-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Расстояние между кнопкой и индикатором */
+}
+
+#admin-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 10px;
+    transition: opacity 0.3s ease;
+    opacity: 0.1;
+    color: white;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    order: 1; /* Устанавливаем порядок: кнопка первая */
+}
+
+.date-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    opacity: 0.1;
+    order: 2; /* Устанавливаем порядок: индикатор второй */
+}
+
+.admin-modal {
+    display: none;
+    position: fixed;
+    bottom: 50px;
+    left: 10px;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.9),
+        rgba(25, 25, 25, 0.95)
+    );
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.2);
+    border: 1px solid rgba(255, 105, 180, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    min-width: 250px;
+}
+
+.admin-modal.show {
+    display: block;
+}
+
+.admin-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 105, 180, 0.2);
+    padding-bottom: 10px;
+}
+
+.admin-modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-family: 'Comfortaa', cursive;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.close-modal:hover {
+    opacity: 1;
+}
+
+.admin-modal-body input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 105, 180, 0.2);
+    border-radius: 5px;
+    color: #fff;
+    font-family: 'Comfortaa', cursive;
+}
+
+.admin-modal-body input:focus {
+    outline: none;
+    border-color: rgba(255, 105, 180, 0.5);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.button-group button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Comfortaa', cursive;
+    transition: all 0.3s;
+}
+
+#apply-date {
+    background: rgba(255, 105, 180, 0.3);
+    color: #fff;
+}
+
+#apply-date:hover {
+    background: rgba(255, 105, 180, 0.5);
+}
+
+#reset-date {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+#reset-date:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Стили для input type="date" */
+input[type="date"] {
+    color-scheme: dark;
+}
+
+.date-indicator:hover {
+    opacity: 0.8;
+}
+
+.date-indicator.system {
+    background-color: #00ff00;
+    box-shadow: 0 0 5px #00ff00;
+}
+
+.date-indicator.custom {
+    background-color: #ff0000;
+    box-shadow: 0 0 5px #ff0000;
+}
+
+.gift-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.gift-box {
+    font-size: 64px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.gift-box.bounce {
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.gift-hint {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 10px;
+}
+
+.gift-box.glow-on-hold {
+    transition: all 0.5s ease;
+}
+
+.gift-box.glow-on-hold.active {
+    filter: drop-shadow(0 0 20px rgba(255, 105, 180, 1))
+           brightness(1.5);
+    transform: scale(1.1);
+}
+
+.gift-box.explode {
+    animation: explode 0.5s forwards;
+}
+
+@keyframes explode {
+    0% { 
+        transform: scale(1); 
+        opacity: 1;
+        filter: brightness(1);
+    }
+    50% { 
+        transform: scale(1.5); 
+        opacity: 0.8;
+        filter: brightness(2);
+    }
+    100% { 
+        transform: scale(2); 
+        opacity: 0;
+        filter: brightness(3);
+    }
+}
+
+.joke-text {
+    font-size: 24px;
+    text-align: center;
+    opacity: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.small-text {
+    font-size: 18px;
+    opacity: 0.7;
+}
+
+.friends-wishes {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+    height: calc(100vh - 40px);
+    max-height: 80vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    margin-top: 20px;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+.continue-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+    order: 2; /* Помещаем кнопку после сообщения */
+}
+
+.continue-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: white;
+    font-family: 'Comfortaa', cursive;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.5s ease-out forwards 0.5s;
+}
+
+.continue-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Улучшаем стиль скроллбара для всех устройств */
+.friends-wishes::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.friends-wishes::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.friends-wishes::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.friends-wishes::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Добавляем стили для Firefox */
+.friends-wishes {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}
+
+.wish-card {
+    opacity: 0;
+    transform: translateY(20px);
+    margin-bottom: 20px;
+}
+
+.friend-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    position: relative;
+}
+
+.friend-name {
+    font-size: 24px;
+    color: #ff8dc6;
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.typing-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-bottom: 15px;
+    font-family: 'Comfortaa', cursive;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.typing-dots {
+    display: inline-flex;
+    gap: 3px;
+    margin-left: 3px;
+}
+
+.typing-dot {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: typingDot 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingDot {
+    0%, 60%, 100% { 
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% { 
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+/* Убираем старый индикатор */
+.typing-indicator {
+    display: none;
+}
+
+.blur-text {
+    filter: blur(5px);
+    color: rgba(255, 255, 255, 0.7);
+    transition: none;
+    user-select: none;
+    cursor: pointer;
+    text-shadow: none;
+    position: relative;
+    overflow: hidden;
+    will-change: filter, color;
+    -webkit-font-smoothing: antialiased;
+}
+
+.reveal-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.2);
+    transition: opacity 0.5s ease;
+    will-change: opacity;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+}
+
+.reveal-canvas::before {
+    content: 'Нажми чтобы открыть';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 16px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    opacity: 0.8;
+    pointer-events: none;
+    filter: blur(0);
+    white-space: nowrap;
+}
+
+.reveal-canvas.fading {
+    opacity: 0;
+}
+
+.blur-text.revealed {
+    filter: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.birthday-stage.stage-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.birthday-stage .message-content {
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Добавляем hardware acceleration для анимаций */
+.star,
+#heart-canvas,
+#congrats-message,
+#additional-message,
+.gift-box,
+.reveal-canvas {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* Добавляем поддержку touch-events */
+@media (hover: none) {
+    .gift-box,
+    .reveal-canvas {
+        cursor: default;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* Изменяем анимацию fadeIn */
+@keyframes fadeInText {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-bubble {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 15px;
+    max-width: 85%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрируем содержимое */
+}
+
+.message-bubble::before {
+    display: none;
+}
+
+.message-content {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 18px;
+    line-height: 1.6;
+    font-family: 'Comfortaa', cursive;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%; /* Занимаем всю ширину */
+}
+
+.message-time {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 8px;
+    text-align: right;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    width: 100%; /* Занимаем всю ширину */
+}
+
+.message-status {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 14px;
+    color: #91ffb9;
+}
+
+/* Добавляем стиль для контейнера сообщений */
+.message-content-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.friend-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 0 10px rgba(255, 105, 180, 0.3),
+        0 0 20px rgba(255, 105, 180, 0.2);
+    object-fit: cover;
+    transition: all 0.3s ease;
+    position: absolute;
+    right: calc(50% + 55px);
+}
+
+.friend-avatar:hover {
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 0 15px rgba(255, 105, 180, 0.4),
+        0 0 30px rgba(255, 105, 180, 0.3);
+}
+
+/* Добавляем медиа-запрос для мобильных устройств */
+@media (max-width: 768px) {
+    .friend-avatar {
+        width: 30px;
+        height: 30px;
+        right: calc(50% + 45px);
+    }
+    
+    .friend-name {
+        font-size: 20px;
+    }
+}
+
+.performance-toggle-container {
+    margin-bottom: 15px;
+}
+
+.performance-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Comfortaa', cursive;
+    color: white;
+}
+
+.performance-toggle input {
+    display: none; /* Скрываем стандартный чекбокс */
+}
+
+.performance-toggle .slider {
+    position: relative;
+    width: 60px;
+    height: 34px;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: background-color 0.2s;
+}
+
+.performance-toggle .slider:before {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.performance-toggle input:checked + .slider {
+    background-color: #4caf50; /* Цвет при включении */
+}
+
+.performance-toggle input:checked + .slider:before {
+    transform: translateX(26px); /* Перемещение кнопки при включении */
+}

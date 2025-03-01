@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С 8 Марта!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preload" href="fonts/Pacifico-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/Comfortaa-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <script src="anime.min.js" async></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <div id="stars"></div>
+    <canvas id="heart-canvas"></canvas>
+    <div id="click-message">Нажми на ❤️</div>
+    
+    <div class="text-container">
+        <div id="congrats-message">С 8 Марта, дорогая! 💐</div>
+        <div id="additional-message">
+            <!-- Весь контент будет добавляться динамически через JavaScript -->
+        </div>
+    </div>
+    
+    <audio id="music" src="music.mp3" loop></audio>
+    <div id="music-control"></div>
+    <script src="script.js"></script>
+    
+    <div id="admin-panel">
+        <div class="admin-controls">
+            <button id="admin-button">⚙️</button>
+            <div id="date-indicator" class="date-indicator"></div>
+        </div>
+        
+        <!-- Добавляем модальное окно -->
+        <div id="admin-modal" class="admin-modal">
+            <div class="admin-modal-content">
+                <div class="admin-modal-header">
+                    <h3>Панель администратора</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="admin-modal-body">
+                    <div class="performance-toggle-container">
+                        <label class="performance-toggle">
+                            <input type="checkbox" id="performance-toggle">
+                            <span class="slider"></span>
+                            Высокая производительность
+                        </label>
+                    </div>
+                    <div class="password-section">
+                        <input type="text" id="admin-password" placeholder="Введите пароль">
+                    </div>
+                    <div class="date-section" style="display: none;">
+                        <input type="date" id="custom-date">
+                        <div class="button-group">
+                            <button id="apply-date">Применить</button>
+                            <button id="reset-date">Сбросить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
